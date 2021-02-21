@@ -215,23 +215,26 @@ img {vertical-align: middle;}
                                     <p><a class="float-right likelink" href="#">Reply</a><p>
                                 </div>
                             </div>
-                            <div class="row">
+                            <div class="row comform">
                                 <div class="col-md-3">
                                     <div class="input-container">
                                         <i class="fa fa-user icon"></i>
-                                        <input class="input-field" type="text" placeholder="@instagram account" name="usrnm">
+                                        <input class="input-field actname" type="text" placeholder="@instagram account" name="actname" require>
                                     </div>
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-container">
                                         <i class="fa fa-comment icon"></i>
-                                        <input class="input-field" type="text" placeholder="Write a comment" name="usrnm">
+                                        <input class="input-field commt" type="text" placeholder="Write a comment" name="commt" require>
+                                        <input class="input-field postid" type="hidden" name="postid" value="{{ $book->id }}" require>
+                                        <input class="input-field replyto" type="hidden" name="replyto" value="0" require>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
                                     <div class="input-container">
                                         <!-- <i class="fa fa-comment icon"></i> -->
-                                        <input class="input-submit" type="button" name="submit" value="Post Comment">
+                                        <!-- <input class="input-submit" type="button" name="submit" value="Post Comment"> -->
+                                        <a type="button" data-id="{{ $book->id }}" data-count="0" data-active="0" class="input-submit" style="text-align:center;">Post Comment</a>
                                     </div>
                                 </div>
                             </div>
@@ -485,6 +488,7 @@ img {vertical-align: middle;}
         }
     });
     
+    
     $(".like").on("click", function(){
         var inc_nums = [5,7,10];
         var dataId = $(this).attr("data-id");
@@ -505,6 +509,31 @@ img {vertical-align: middle;}
         }
     });
 
-    $( ".comments" ).prepend( '<div class="maincom"><span><b>@instagram</b></span><br/><span>Comment One</span></div>' );
+    $(".input-submit").on("click", function(){
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+        // var formcontent = $(this).attr("data-id");
+        // var commt = $(this).closest("p").text()
+        var username = $(this).closest("div.comform").find('input.actname').val();
+        var commt = $(this).closest("div.comform").find('input.commt').val();
+
+        var myKeyVals = { name : username, comment : commt }
+
+
+
+        var saveData = $.ajax({
+            type: 'POST',
+            url: "/makecomment",
+            data: myKeyVals,
+            dataType: "text",
+            success: function(resultData) { alert("Save Complete") }
+        });
+        // alert(commt);
+        // commt = '';
+        // $('.formcontent').find('.commt').val('');
+        // $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' );
+    });
+    // $( ".comments" ).prepend( '<div class="maincom"><span><b>@instagram</b></span><br/><span>Comment One</span></div>' );
 </script>
 @endsection('content')
