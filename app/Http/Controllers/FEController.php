@@ -22,6 +22,7 @@ class FEController extends Controller
         //
         $articles = Article::orderBy('rank', 'DESC')->get();
         $sprs = SprPost::all();
+        $comments = Comments::all();
         $sprs_t = $sprs->where('social_media', '=', 'Twitter');
         $sprs_i = $sprs->where('social_media', '=', 'Instagram');
         $sprs_f = $sprs->where('social_media', '=', 'Facebook');
@@ -29,7 +30,7 @@ class FEController extends Controller
         $betcodes = BetCode::all();
         $betselections = BetSelect::all();
         // dd($betcodes);
-        return view('front-end.welcome', compact('articles', 'sprs', 'betcodes', 'betselections', 'sprs_t', 'sprs_i', 'sprs_f', 'today_book'));
+        return view('front-end.welcome', compact('articles', 'sprs', 'betcodes', 'betselections', 'sprs_t', 'sprs_i', 'sprs_f', 'today_book', 'comments'));
     }
 
     /**
@@ -89,16 +90,14 @@ class FEController extends Controller
     public function makecomment(Request $request)
     {
         //
-        $input = $request->all();
-        dd($input);
-        // if(isset($_POST['username'])) {
-        //     $username = $_POST['username'];
-        // }
+        // $input = Request::all();
+        $data = $request->json()->all();
+        // dd($input);
         // $name = $request->username;
         Comments::create([
-            'username' => $input['username'],
-            'comment' => 'dami',
-            'post_id' => 0,
+            'username' => $data['username'],
+            'comment' => $data['comment'],
+            'post_id' => $data['postid'],
             'reply_to' => 0,
             'is_deleted' => 0
         ]);

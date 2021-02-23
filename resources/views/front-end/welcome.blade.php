@@ -209,11 +209,17 @@ img {vertical-align: middle;}
                             <h4>{{ $book->caption }}</h4>
                             <hr/>
                             <div class="comments">
+                            <?php $tot = 0; ?>
+                                @foreach($comments as $comment)
+                                @if($comment->post_id == $book->id && $tot < 3)
+                                <?php $tot++; ?>
                                 <div class="maincom">
-                                    <span><b>@instagram</b></span><br/>
-                                    <span>Comment</span>
-                                    <p><a class="float-right likelink" href="#">Reply</a><p>
+                                    <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
+                                    <span>{{ $comment->comment }}</span>
+                                    <!-- <p><a class="float-right likelink" href="#">Reply</a><p> -->
                                 </div>
+                                @endif
+                                @endforeach
                             </div>
                             <form id="deleteAliasName" class="ui form" action="/makecomment" method="post">
                             <div class="row comform">
@@ -512,14 +518,14 @@ img {vertical-align: middle;}
     });
 
     $(".input-submit").on("click", function(){
-        // headers: {
-        //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        // }
-        // var formcontent = $(this).attr("data-id");
-        // var commt = $(this).closest("p").text()
         let username = $(this).closest("div.comform").find('input.actname').val();
         let commt = $(this).closest("div.comform").find('input.commt').val();
-        // let _token   = $('meta[name="csrf-token"]').attr('content');
+        let postid = $(this).closest("div.comform").find('input.postid').val();
+        let mydata = JSON.stringify({
+                "username": username,
+                "comment": commt,
+                "postid": postid
+            });
         
 
 
@@ -529,42 +535,21 @@ img {vertical-align: middle;}
             },
             type: "POST",
             url: "/makecomment",
-            data:{
-                username:username,
-                comment:commt
-            },
+            data: mydata,
             dataType: "json",
             contentType: false,
             cache: false,
             processData: false,
-            beforeSend : function(username)
-            {
-                console.log(username);
-            },
             success: function (data) { 
                 console.log("Success");
             },
-            error: function(data){
+            error: function(){
                 console.log('failed');
             }
         });
-
-        // var myKeyVals = { name : username, comment : commt }
-
-
-
-        // var saveData = $.ajax({
-        //     type: 'POST',
-        //     url: "/makecomment",
-        //     data: myKeyVals,
-        //     dataType: "text",
-        //     success: function(resultData) { alert("Save Complete") }
-        // });
-        // alert(commt);
-        // commt = '';
-        // $('.formcontent').find('.commt').val('');
+        $(this).closest("div.comform").find('.commt').val('');
+        $(this).closest("div.comform").find('.actname').val('');
         $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' );
     });
-    // $( ".comments" ).prepend( '<div class="maincom"><span><b>@instagram</b></span><br/><span>Comment One</span></div>' );
 </script>
 @endsection('content')
