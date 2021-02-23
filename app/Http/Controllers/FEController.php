@@ -7,6 +7,7 @@ use App\BetCode;
 use App\BetSelect;
 use App\SprPost;
 use App\Tdbk;
+use App\Comments;
 use Illuminate\Http\Request;
 
 class FEController extends Controller
@@ -85,9 +86,24 @@ class FEController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function makecomment(Request $request)
     {
         //
+        $input = $request->all();
+        dd($input);
+        // if(isset($_POST['username'])) {
+        //     $username = $_POST['username'];
+        // }
+        // $name = $request->username;
+        Comments::create([
+            'username' => $input['username'],
+            'comment' => 'dami',
+            'post_id' => 0,
+            'reply_to' => 0,
+            'is_deleted' => 0
+        ]);
+        // return 200;
+        return response()->json(['success'=>'Ajax request submitted successfully']);
     }
 
     /**

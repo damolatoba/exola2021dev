@@ -21,7 +21,7 @@ Route::get('/article/{article}', 'FEController@show');
 
 Route::get('/copy-code', 'CopyPostController@display');
 
-Route::post('/makecomment', 'CopyPostController@display');
+Route::post('/makecomment', 'FEController@makecomment');
 
 // Auth::routes();
 

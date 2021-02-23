@@ -140,7 +140,7 @@ class SprController extends Controller
     {
         //
         // dd($post);
-        $post->lct = $postName;
+        // $post->lct = $postName;
         // SprPost::destroy($post->id);
         // return back()->with('success','Post deleted successfully!');
     }

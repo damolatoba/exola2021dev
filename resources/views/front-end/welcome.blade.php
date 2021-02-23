@@ -215,6 +215,7 @@ img {vertical-align: middle;}
                                     <p><a class="float-right likelink" href="#">Reply</a><p>
                                 </div>
                             </div>
+                            <form id="deleteAliasName" class="ui form" action="/makecomment" method="post">
                             <div class="row comform">
                                 <div class="col-md-3">
                                     <div class="input-container">
@@ -238,6 +239,7 @@ img {vertical-align: middle;}
                                     </div>
                                 </div>
                             </div>
+                            </form>
                         </div>                        
                         @empty
                         @endforelse
@@ -510,29 +512,58 @@ img {vertical-align: middle;}
     });
 
     $(".input-submit").on("click", function(){
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
+        // headers: {
+        //     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        // }
         // var formcontent = $(this).attr("data-id");
         // var commt = $(this).closest("p").text()
-        var username = $(this).closest("div.comform").find('input.actname').val();
-        var commt = $(this).closest("div.comform").find('input.commt').val();
+        let username = $(this).closest("div.comform").find('input.actname').val();
+        let commt = $(this).closest("div.comform").find('input.commt').val();
+        // let _token   = $('meta[name="csrf-token"]').attr('content');
+        
 
-        var myKeyVals = { name : username, comment : commt }
 
-
-
-        var saveData = $.ajax({
-            type: 'POST',
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            type: "POST",
             url: "/makecomment",
-            data: myKeyVals,
-            dataType: "text",
-            success: function(resultData) { alert("Save Complete") }
+            data:{
+                username:username,
+                comment:commt
+            },
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            beforeSend : function(username)
+            {
+                console.log(username);
+            },
+            success: function (data) { 
+                console.log("Success");
+            },
+            error: function(data){
+                console.log('failed');
+            }
         });
+
+        // var myKeyVals = { name : username, comment : commt }
+
+
+
+        // var saveData = $.ajax({
+        //     type: 'POST',
+        //     url: "/makecomment",
+        //     data: myKeyVals,
+        //     dataType: "text",
+        //     success: function(resultData) { alert("Save Complete") }
+        // });
         // alert(commt);
         // commt = '';
         // $('.formcontent').find('.commt').val('');
-        // $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' );
+        $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' );
     });
     // $( ".comments" ).prepend( '<div class="maincom"><span><b>@instagram</b></span><br/><span>Comment One</span></div>' );
 </script>
