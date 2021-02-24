@@ -22,7 +22,7 @@ class FEController extends Controller
         //
         $articles = Article::orderBy('rank', 'DESC')->get();
         $sprs = SprPost::all();
-        $comments = Comments::all();
+        $comments = Comments::orderBy('id', 'DESC')->get();
         $sprs_t = $sprs->where('social_media', '=', 'Twitter');
         $sprs_i = $sprs->where('social_media', '=', 'Instagram');
         $sprs_f = $sprs->where('social_media', '=', 'Facebook');

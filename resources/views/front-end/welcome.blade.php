@@ -518,38 +518,48 @@ img {vertical-align: middle;}
     });
 
     $(".input-submit").on("click", function(){
-        let username = $(this).closest("div.comform").find('input.actname').val();
-        let commt = $(this).closest("div.comform").find('input.commt').val();
-        let postid = $(this).closest("div.comform").find('input.postid').val();
-        let mydata = JSON.stringify({
-                "username": username,
-                "comment": commt,
-                "postid": postid
-            });
-        
 
-
-        $.ajax({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
-            type: "POST",
-            url: "/makecomment",
-            data: mydata,
-            dataType: "json",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function (data) { 
-                console.log("Success");
-            },
-            error: function(){
-                console.log('failed');
+        if ( !$(this).closest("div.comform").find('.commt').val() || !$(this).closest("div.comform").find('.actname').val() ){
+            alert('Please fill in the comment fields');
+        }else{
+            let username = $(this).closest("div.comform").find('input.actname').val();
+            if (username.includes("@")){
+                username = username.replace('@', '');
+                let commt = $(this).closest("div.comform").find('input.commt').val();
+                let postid = $(this).closest("div.comform").find('input.postid').val();
+                let mydata = JSON.stringify({
+                        "username": username,
+                        "comment": commt,
+                        "postid": postid
+                    });
+                
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: "/makecomment",
+                    data: mydata,
+                    dataType: "json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function (data) { 
+                        console.log("Success");
+                    },
+                    error: function(){
+                        console.log('failed');
+                    }
+                });
+                $(this).closest("div.comform").find('.commt').val('');
+                $(this).closest("div.comform").find('.actname').val('');
+                $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' );
+            }else{
+                alert('Please add the @ sign to your username');
             }
-        });
-        $(this).closest("div.comform").find('.commt').val('');
-        $(this).closest("div.comform").find('.actname').val('');
-        $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' );
+            
+        }
+        
     });
 </script>
 @endsection('content')
