@@ -160,6 +160,14 @@ img {vertical-align: middle;}
 .likelink {
     font-size:small;
 }
+
+.divnone {
+    display: none;
+}
+
+.divblock {
+    display: block;
+}
 </style>
     <!-- Top News Start-->
     <div class="top-news">
@@ -211,16 +219,27 @@ img {vertical-align: middle;}
                             <div class="comments">
                             <?php $tot = 0; ?>
                                 @foreach($comments as $comment)
-                                @if($comment->post_id == $book->id && $tot < 3)
-                                <?php $tot++; ?>
-                                <div class="maincom">
+                                @if($comment->post_id == $book->id && $tot <= 2)
+                                <div class="maincom divblock">
                                     <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     <span>{{ $comment->comment }}</span>
                                     <!-- <p><a class="float-right likelink" href="#">Reply</a><p> -->
                                 </div>
+                                <?php $tot++; ?>
+                                @elseif($comment->post_id == $book->id && $tot > 2)
+                                <div class="maincom divnone">
+                                    <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
+                                    <span>{{ $comment->comment }}</span>
+                                    <!-- <p><a class="float-right likelink" href="#">Reply</a><p> -->
+                                </div>
+                                <?php $tot++; ?>
                                 @endif
                                 @endforeach
-                            </div>
+                                <div style="padding:0 10px 10px;font-size:15px;">
+                                <!-- <a href="#" onclick="morecomm()" class="float-right">Previous comments...</a> -->
+                                <button type="button" class="float-right" onclick="morecomm()">Previous comments...</button>
+                                </div>
+                            </div><br/>
                             <form id="deleteAliasName" class="ui form" action="/makecomment" method="post">
                             <div class="row comform">
                                 <div class="col-md-3">
@@ -561,5 +580,15 @@ img {vertical-align: middle;}
         }
         
     });
+
+    function morecomm() {
+        // document.getElementById("demo").style.color = "red";
+        
+        // alert('clicked');
+        $('.divnone').first().removeClass("divnone").addClass("divblock");
+        $('.divnone').first().removeClass("divnone").addClass("divblock");
+        // $('.divnone').first().removeClass("divnone").addClass("divblock");
+        // return false;
+    }
 </script>
 @endsection('content')
