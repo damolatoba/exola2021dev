@@ -26,7 +26,7 @@ class FEController extends Controller
         $sprs_t = $sprs->where('social_media', '=', 'Twitter');
         $sprs_i = $sprs->where('social_media', '=', 'Instagram');
         $sprs_f = $sprs->where('social_media', '=', 'Facebook');
-        $today_book = Tdbk::orderBy('id', 'DESC')->get();
+        $today_book = Tdbk::orderBy('rate', 'DESC')->orderBy('id', 'DESC')->get();
         $betcodes = BetCode::all();
         $betselections = BetSelect::all();
         // dd($betcodes);
@@ -98,7 +98,7 @@ class FEController extends Controller
             'username' => $data['username'],
             'comment' => $data['comment'],
             'post_id' => $data['postid'],
-            'reply_to' => 0,
+            'reply_to' => $data['replyto'],
             'is_deleted' => 0
         ]);
         // return 200;

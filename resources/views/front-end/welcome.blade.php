@@ -4,7 +4,11 @@
 <style>
 * {box-sizing: border-box}
 body {font-family: Verdana, sans-serif; margin:0}
-.mySlides {display: none; height:450px; margin:auto;}
+.mySlides {display: none; height:400px; margin:auto;top:5px;}
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+  .mySlides {display: none; height:250px; margin:auto;top:5px;}
+}
 .mySlides2 {display: none; margin:auto;}
 img {vertical-align: middle;}
 
@@ -146,6 +150,10 @@ img {vertical-align: middle;}
   background-color: dodgerblue;
 }
 
+@media only screen and (max-width: 768px) {
+    .input-submit {width: 100%;}
+}
+
 .input-submit:hover {
     background-color: blue;
 }
@@ -154,7 +162,23 @@ img {vertical-align: middle;}
     background-color: #80b3ff;
     border-radius: 15px;
     margin: 0 0 10px 0;
-    padding:15px;
+    padding:10px 25px;
+}
+
+.myerror {
+    background-color: #ff1a1a;
+    border-radius: 15px;
+    margin: 0;
+    padding:6px;
+    display: none;
+}
+
+.myerror2 {
+    background-color: #ff1a1a;
+    border-radius: 15px;
+    margin: 0;
+    padding:6px;
+    display: none;
 }
 
 .likelink {
@@ -176,7 +200,7 @@ img {vertical-align: middle;}
                 @if(isset($today_book))
                 <div class="col-md-12">
                     <div class="row tn-slider">
-                        <div class="col-md-12" style="background-color:#9fbfdf;">
+                        <div class="col-md-12" style="background-color:white;">
                         
 
                         <div class="slideshow-container">
@@ -204,7 +228,6 @@ img {vertical-align: middle;}
 
                         </div>
 
-                        <br/>
                         <div style="text-align:center">
                         @for ($i = 1; $i <= count($today_book); $i++)
                         <span class="dot" onclick="currentSlide({{$i}})"></span> 
@@ -213,8 +236,8 @@ img {vertical-align: middle;}
 
                         <div class="slideshow-container">
                         @forelse($today_book as $book)
-                        <div class="mySlides2" style="padding:15px;">
-                            <h4>{{ $book->caption }}</h4>
+                        <div class="mySlides2" style="padding:0 15px;width:100%;">
+                            <p style="font-size:16px;"><b>{{ $book->caption }}</b></p>
                             <hr/>
                             <div class="comments">
                             <?php $tot = 0; ?>
@@ -222,26 +245,46 @@ img {vertical-align: middle;}
                                 @if($comment->post_id == $book->id && $tot <= 2)
                                 <div class="maincom divblock">
                                     <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
-                                    <span>{{ $comment->comment }}</span>
-                                    <!-- <p><a class="float-right likelink" href="#">Reply</a><p> -->
+                                    @if($comment->is_deleted == 0)
+                                        <span style="font-size:14px;">{{ $comment->comment }}</span>
+                                    @else
+                                        <span style="color:#404040;font-size:14px;">Comment is deleted because of policy and privacy breach.</span>
+                                    @endif
+
+                                    <!-- Reply button -->
+                                    <p><a class="float-right likelink" type="button" data-reply="{{ $comment->username }}" data-replyid="{{ $comment->id }}">Reply</a><p>
                                 </div>
                                 <?php $tot++; ?>
                                 @elseif($comment->post_id == $book->id && $tot > 2)
                                 <div class="maincom divnone">
                                     <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
-                                    <span>{{ $comment->comment }}</span>
-                                    <!-- <p><a class="float-right likelink" href="#">Reply</a><p> -->
+                                    @if($comment->is_deleted == 0)
+                                        <span style="font-size:14px;">{{ $comment->comment }}</span>
+                                    @else
+                                        <span style="color:#404040;font-size:14px;">Comment is deleted because of policy and privacy breach.</span>
+                                    @endif
+                                    <p><a class="float-right likelink" type="button" data-reply="{{ $comment->username }}" data-replyid="{{ $comment->id }}">Reply</a><p>
                                 </div>
                                 <?php $tot++; ?>
                                 @endif
                                 @endforeach
                                 <div style="padding:0 10px 10px;font-size:15px;">
                                 <!-- <a href="#" onclick="morecomm()" class="float-right">Previous comments...</a> -->
-                                <button type="button" class="float-right" onclick="morecomm()">Previous comments...</button>
+                                @if($tot > 3)
+                                <a type="button" class="float-right" onclick="morecomm()">Previous comments...</a>
+                                @endif
                                 </div>
                             </div><br/>
+                            <div class="errorspace"></div>
+                            <!-- <div class="myerror" style="width:100%;">
+                                <p style="text-align:center;color:white;font-size:12px;margin:0;">Please add the @ sign to before your instagram username</p>
+                            </div>
+                            <div class="myerror2" style="width:100%;">
+                                <p style="text-align:center;color:white;font-size:12px;margin:0;">All fields are required.</p>
+                            </div> -->
                             <form id="deleteAliasName" class="ui form" action="/makecomment" method="post">
                             <div class="row comform">
+                                
                                 <div class="col-md-3">
                                     <div class="input-container">
                                         <i class="fa fa-user icon"></i>
@@ -539,17 +582,33 @@ img {vertical-align: middle;}
     $(".input-submit").on("click", function(){
 
         if ( !$(this).closest("div.comform").find('.commt').val() || !$(this).closest("div.comform").find('.actname').val() ){
-            alert('Please fill in the comment fields');
+            // alert('Please fill in the comment fields');
+            $(".errorspace").replaceWith('<div class="myerror2" style="width:100%;"><p style="text-align:center;color:white;font-size:12px;margin:0;">All fields are required.</p></div>')
+            $("div.myerror2").fadeIn(1500);
+            // $("div.myerror2").css("display", "block");
+                setTimeout(function() {
+                    $("div.myerror2").fadeOut(1500);
+                    // $("div.myerror").css("display", "none");
+                }, 1500);
         }else{
             let username = $(this).closest("div.comform").find('input.actname').val();
-            if (username.includes("@")){
+            // var matches = username.match(/(\d+)/);
+            // first = username.first();
+            // var words = username[i].split(" ");
+            var word = username.substring(0)
+            var char = word.slice(0,1)
+            // var word = firstWords.push(words[0]);
+            // console.log(char)
+            if (char == "@"){
                 username = username.replace('@', '');
                 let commt = $(this).closest("div.comform").find('input.commt').val();
                 let postid = $(this).closest("div.comform").find('input.postid').val();
+                let replyto = $(this).closest("div.comform").find('input.replyto').val();
                 let mydata = JSON.stringify({
                         "username": username,
                         "comment": commt,
-                        "postid": postid
+                        "postid": postid,
+                        "replyto": replyto
                     });
                 
                 $.ajax({
@@ -570,23 +629,46 @@ img {vertical-align: middle;}
                         console.log('failed');
                     }
                 });
+
+                $('div.mySlides2').animate({'margin-top': '30px'}, 1000);
+
+                // setTimeout(function() {
+                    $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' ).fadeIn(4000);
+                // }, 1500);  
+                
                 $(this).closest("div.comform").find('.commt').val('');
                 $(this).closest("div.comform").find('.actname').val('');
-                $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' );
+                  
             }else{
-                alert('Please add the @ sign to your username');
+                // alert('Please add the @ sign to your username');
+                // $("div.myerror").css("display", "block");
+                $(".errorspace").replaceWith('<div class="myerror" style="width:100%;"><p style="text-align:center;color:white;font-size:12px;margin:0;">Please add the @ sign to before your instagram username</p></div>')
+                $("div.myerror").fadeIn(1500);
+                setTimeout(function() {
+                    $("div.myerror").fadeOut(1000);
+                    // $("div.myerror").css("display", "none");
+                }, 1500);
             }
             
         }
         
     });
 
+    $(".likelink").on("click", function(){
+        var dataId = $(this).attr("data-replyid");
+        var dataReply = $(this).attr("data-reply");
+        $(this).closest("div.slideshow-container").find('.commt').val('@'+dataReply+' ').focus();
+        $(this).closest("div.slideshow-container").find('.replyto').val(dataId);
+    });
+    
+
     function morecomm() {
         // document.getElementById("demo").style.color = "red";
         
         // alert('clicked');
-        $('.divnone').first().removeClass("divnone").addClass("divblock");
-        $('.divnone').first().removeClass("divnone").addClass("divblock");
+        $('.divnone').first().fadeIn(2000);
+        $("div.divnone:eq(1)").fadeIn(4500);
+        // $('.divnone').second().fadeIn(2500);
         // $('.divnone').first().removeClass("divnone").addClass("divblock");
         // return false;
     }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Tdbk;
+use App\Comments;
 use Illuminate\Http\Request;
 
 class TdbkController extends Controller
@@ -26,6 +27,66 @@ class TdbkController extends Controller
     {
         //
     }
+
+    public function viewpost($post)
+    {
+        //
+        $comments = Comments::where('post_id', '=', $post)->where('is_deleted', '=', 0)->get();
+        $post = Tdbk::find($post);
+        
+        // dd($post);
+        return view('bookings-admin.post-view', compact('post', 'comments'));
+    }
+
+    public function delcomment($post)
+    {
+        //
+        
+        $post = Comments::find($post);
+        // dd($post);
+        $post->is_deleted = 1;
+        $post->save();
+        // $comments = Comments::where('post_id', '=', $post)->get();
+        // $post = Tdbk::find($post);
+        
+        // dd($post);
+        // return view('bookings-admin.post-view', compact('post', 'comments'));
+        return back()->with('success','Comment deleted successfully!');
+    }
+
+    public function decreasepost($post)
+    {
+        //
+        
+        $post = Tdbk::find($post);
+        // dd($post);
+        $post->rate = $post->rate - 1;
+        $post->save();
+        // $comments = Comments::where('post_id', '=', $post)->get();
+        // $post = Tdbk::find($post);
+        
+        // dd($post);
+        // return view('bookings-admin.post-view', compact('post', 'comments'));
+        return back()->with('success','Priority reduced successfully!');
+    }
+
+    public function increasepost($post)
+    {
+        //
+        
+        $post = Tdbk::find($post);
+        // dd($post);
+        $post->rate = $post->rate + 1;
+        $post->save();
+        // $comments = Comments::where('post_id', '=', $post)->get();
+        // $post = Tdbk::find($post);
+        
+        // dd($post);
+        // return view('bookings-admin.post-view', compact('post', 'comments'));
+        return back()->with('success','Priority increased successfully!');
+    }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -52,6 +113,7 @@ class TdbkController extends Controller
             $post->move(public_path('uploads/tdbooks'), $postName);
             $input['file_name'] = $postName;
             $input['file_type'] = $extension;
+            $input['rate'] = 0;
 
             Tdbk::create($input);
                 return back()->with('success','Booking Posted successfully!');
@@ -108,5 +170,13 @@ class TdbkController extends Controller
         // dd($tdbk);
         Tdbk::destroy($tdbk->id);
         return back()->with('success','Booking deleted successfully!');
+    }
+
+    public function delpost($post)
+    {
+        //
+        // dd($post);
+        Tdbk::destroy($post);
+        return back()->with('success','post deleted successfully!');
     }
 }

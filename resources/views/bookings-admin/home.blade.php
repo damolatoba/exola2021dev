@@ -157,7 +157,7 @@
                     @if( isset($today_book) )
                     <div class="row">
                         @forelse($today_book as $book)
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             @if($book['file_type']== 'jpg' or $book['file_type']== 'jpeg' or $book['file_type']== 'png')
                                 <img src="{{url('')}}/uploads/tdbooks/{{ $book->file_name }}" style="width:100%;" />
                             @else
@@ -168,7 +168,14 @@
                             @endif
                             
                             <p>{{ $book->caption }}</p>
-                            <a type="button" href="#" class="btn btn-secondary btn-sm float-right">Info</a>
+                            <a type="button" href="/post/{{ $book->id }}" class="btn btn-secondary btn-sm float-right">Info</a>
+                            <a type="button" href="/post/increase/{{ $book->id }}" class="btn btn-secondary btn-sm float-right" style="margin:0 2px;">+</a>
+                            <a type="button" href="/post/delete/post/{{ $book->id }}" class="btn btn-secondary btn-sm">Delete</a>
+                            <a type="button" href="/post/decrease/{{ $book->id }}" class="btn btn-secondary btn-sm">-</a>
+                            <!-- <br/>
+                            <br/>
+                            <a type="button" href="/post/{{ $book->id }}" class="btn btn-secondary btn-sm float-right">+</a>
+                            <a type="button" href="/post/delete/post/{{ $book->id }}" class="btn btn-secondary btn-sm">-</a> -->
                         </div>
                         @empty
                         @endforelse

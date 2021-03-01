@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\CopyPost;
 use App\Tdbk;
 use App\Article;
+use App\Comments;
 use Illuminate\Http\Request;
 
 class CopyPostController extends Controller

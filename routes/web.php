@@ -67,6 +67,18 @@ Route::post('/create-tdbook', 'TdbkController@store')->name('create-tdbook');
 
 Route::get('/delete-tdbook/{tdbk}', 'TdbkController@destroy')->name('delete-todaybook');
 
+Route::get('/post/{post}', 'TdbkController@viewpost');
+
+Route::get('/post/delete/{post}', 'TdbkController@delcomment');
+
+Route::get('/post/delete/post/{post}', 'TdbkController@delpost');
+
+Route::get('/post/decrease/{post}', 'TdbkController@decreasepost');
+
+Route::get('/post/increase/{post}', 'TdbkController@increasepost');
+
 Route::post('/create-booking-copy', 'CopyPostController@store')->name('create-booking-copy');
+
+
 
 

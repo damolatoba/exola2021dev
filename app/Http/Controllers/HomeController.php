@@ -31,7 +31,7 @@ class HomeController extends Controller
     {
         $users = User::where('class', '=', 'b')->get();
         $sprs = SprPost::all();
-        $today_book = Tdbk::orderBy('id', 'DESC')->get();
+        $today_book = Tdbk::orderBy('rate', 'DESC')->orderBy('id', 'DESC')->get();
         // dd($today_book);
         $copy_post = CopyPost::orderBy('id', 'DESC')->first();
         $betcodes = BetCode::all();
