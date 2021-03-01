@@ -293,8 +293,9 @@ img {vertical-align: middle;}
                                 </div>
                                 <div class="col-md-9">
                                     <div class="input-container">
-                                        <i class="fa fa-comment icon"></i>
-                                        <input class="input-field commt" type="text" placeholder="Write a comment" name="commt" require>
+                                        <!-- <i class="fa fa-comment icon"></i> -->
+                                        <!-- <input class="input-field commt" type="text" placeholder="Write a comment" name="commt" require> -->
+                                        <textarea class="input-field commt" placeholder="Write a comment" name="commt" style="height: 120px;" require></textarea>
                                         <input class="input-field postid" type="hidden" name="postid" value="{{ $book->id }}" require>
                                         <input class="input-field replyto" type="hidden" name="replyto" value="0" require>
                                     </div>
@@ -601,7 +602,7 @@ img {vertical-align: middle;}
             // console.log(char)
             if (char == "@"){
                 username = username.replace('@', '');
-                let commt = $(this).closest("div.comform").find('input.commt').val();
+                let commt = $(this).closest("div.comform").find('textarea.commt').val();
                 let postid = $(this).closest("div.comform").find('input.postid').val();
                 let replyto = $(this).closest("div.comform").find('input.replyto').val();
                 let mydata = JSON.stringify({
