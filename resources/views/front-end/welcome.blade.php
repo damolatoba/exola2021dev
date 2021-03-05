@@ -246,7 +246,7 @@ img {vertical-align: middle;}
                                 <div class="maincom divblock">
                                     <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     @if($comment->is_deleted == 0)
-                                        <span style="font-size:14px;">{{ $comment->comment }}</span>
+                                        <span style="font-size:14px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
                                     @else
                                         <span style="color:#404040;font-size:14px;">Comment is deleted because of policy and privacy breach.</span>
                                     @endif
@@ -259,7 +259,7 @@ img {vertical-align: middle;}
                                 <div class="maincom divnone">
                                     <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     @if($comment->is_deleted == 0)
-                                        <span style="font-size:14px;">{{ $comment->comment }}</span>
+                                        <span style="font-size:14px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
                                     @else
                                         <span style="color:#404040;font-size:14px;">Comment is deleted because of policy and privacy breach.</span>
                                     @endif
