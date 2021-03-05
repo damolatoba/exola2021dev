@@ -244,6 +244,20 @@ img {vertical-align: middle;}
                                 @foreach($comments as $comment)
                                 @if($comment->post_id == $book->id && $tot <= 2)
                                 <div class="maincom divblock">
+                                <?php
+                                    $secondsDifference=strtotime(date('Y-m-d H:i:s'))-strtotime($comment->created_at);
+                                    if($secondsDifference < 60){
+                                        $posttimediff = 'Now';
+                                    }elseif($secondsDifference < 3600){
+                                        $posttimediff = (int) ($secondsDifference/60);
+                                        $posttimediff = $posttimediff.' mins ago';
+                                    }else{
+                                        $posttimediff = (int) ($secondsDifference/86400);
+                                        $posttimediff = $posttimediff.' days ago';
+                                    }
+                                ?>
+                                    <!-- <span class="float-right" style="font-size:13px;">{{ $comment->created_at }}</span> -->
+                                    <span class="float-right" style="font-size:13px;">{{ $posttimediff }}</span>
                                     <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     @if($comment->is_deleted == 0)
                                         <span style="font-size:14px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
@@ -257,7 +271,8 @@ img {vertical-align: middle;}
                                 <?php $tot++; ?>
                                 @elseif($comment->post_id == $book->id && $tot > 2)
                                 <div class="maincom divnone">
-                                    <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
+                                <span class="float-right" style="font-size:13px;">{{ $posttimediff }}</span>
+                                <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     @if($comment->is_deleted == 0)
                                         <span style="font-size:14px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
                                     @else
@@ -634,7 +649,7 @@ img {vertical-align: middle;}
                 $('div.mySlides2').animate({'margin-top': '30px'}, 1000);
 
                 // setTimeout(function() {
-                    $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' ).fadeIn(4000);
+                    $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span class="float-right" style="font-size:13px;">Now</span><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' ).fadeIn(4000);
                 // }, 1500);  
                 
                 $(this).closest("div.comform").find('.commt').val('');
