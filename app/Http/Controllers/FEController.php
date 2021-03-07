@@ -22,7 +22,8 @@ class FEController extends Controller
         //
         $articles = Article::orderBy('rank', 'DESC')->get();
         $sprs = SprPost::all();
-        $comments = Comments::orderBy('id', 'DESC')->get();
+        $comments = Comments::where('reply_to', '=', 0)->orderBy('id', 'DESC')->get();
+        $replycomments = Comments::where('reply_to', '!=', 0)->orderBy('id', 'DESC')->get();
         $sprs_t = $sprs->where('social_media', '=', 'Twitter');
         $sprs_i = $sprs->where('social_media', '=', 'Instagram');
         $sprs_f = $sprs->where('social_media', '=', 'Facebook');
@@ -30,7 +31,7 @@ class FEController extends Controller
         $betcodes = BetCode::all();
         $betselections = BetSelect::all();
         // dd($betcodes);
-        return view('front-end.welcome', compact('articles', 'sprs', 'betcodes', 'betselections', 'sprs_t', 'sprs_i', 'sprs_f', 'today_book', 'comments'));
+        return view('front-end.welcome', compact('articles', 'sprs', 'betcodes', 'betselections', 'sprs_t', 'sprs_i', 'sprs_f', 'today_book', 'comments', 'replycomments'));
     }
 
     /**

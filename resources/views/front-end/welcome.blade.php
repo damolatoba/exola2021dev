@@ -165,6 +165,12 @@ img {vertical-align: middle;}
     padding:10px 25px;
 }
 
+.comreplys {
+    border-radius: 15px;
+    margin: 0 0 10px 0;
+    padding:5px 25px;
+}
+
 .myerror {
     background-color: #ff1a1a;
     border-radius: 15px;
@@ -242,15 +248,18 @@ img {vertical-align: middle;}
                             <div class="comments">
                             <?php $tot = 0; ?>
                                 @foreach($comments as $comment)
-                                @if($comment->post_id == $book->id && $tot <= 2)
-                                <div class="maincom divblock">
+                                @if($comment->post_id == $book->id && $tot <= 4)
+                                <div class="maincom divblock" data-divid="{{ $comment->id }}">
                                 <?php
                                     $secondsDifference=strtotime(date('Y-m-d H:i:s'))-strtotime($comment->created_at);
-                                    if($secondsDifference < 60){
+                                    if($secondsDifference <= 60){
                                         $posttimediff = 'Now';
-                                    }elseif($secondsDifference < 3600){
+                                    }elseif($secondsDifference <= 3600){
                                         $posttimediff = (int) ($secondsDifference/60);
                                         $posttimediff = $posttimediff.' mins ago';
+                                    }elseif($secondsDifference <= 86400){
+                                        $posttimediff = (int) ($secondsDifference/3600);
+                                        $posttimediff = $posttimediff.' hours ago';
                                     }else{
                                         $posttimediff = (int) ($secondsDifference/86400);
                                         $posttimediff = $posttimediff.' days ago';
@@ -258,27 +267,91 @@ img {vertical-align: middle;}
                                 ?>
                                     <!-- <span class="float-right" style="font-size:13px;">{{ $comment->created_at }}</span> -->
                                     <span class="float-right" style="font-size:13px;">{{ $posttimediff }}</span>
-                                    <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
+                                    <span>{{ $tot+1 }}. <b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     @if($comment->is_deleted == 0)
-                                        <span style="font-size:14px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
+                                        <span style="font-size:13px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
                                     @else
-                                        <span style="color:#404040;font-size:14px;">Comment is deleted because of policy and privacy breach.</span>
+                                        <span style="color:#404040;font-size:13px;">Comment is deleted because of policy and privacy breach.</span>
                                     @endif
 
                                     <!-- Reply button -->
-                                    <p><a class="float-right likelink" type="button" data-reply="{{ $comment->username }}" data-replyid="{{ $comment->id }}">Reply</a><p>
+                                    <p style="margin:3px 0 0 0;"><a class="float-right likelink" type="button" data-reply="{{ $comment->username }}" data-replyid="{{ $comment->id }}">Reply</a><p><br/>
+
+                                    <div class="commentsreply">
+                                    
+                                    @foreach($replycomments as $repcom)
+                                        @if($repcom->reply_to == $comment->id)
+                                        <div class="comreplys" style="background-color:#ffffb3;">
+                                        <?php
+                                            $secondsDifference=strtotime(date('Y-m-d H:i:s'))-strtotime($repcom->created_at);
+                                            if($secondsDifference <= 60){
+                                                $posttimediff = 'Now';
+                                            }elseif($secondsDifference <= 3600){
+                                                $posttimediff = (int) ($secondsDifference/60);
+                                                $posttimediff = $posttimediff.' mins ago';
+                                            }elseif($secondsDifference <= 86400){
+                                                $posttimediff = (int) ($secondsDifference/3600);
+                                                $posttimediff = $posttimediff.' hours ago';
+                                            }else{
+                                                $posttimediff = (int) ($secondsDifference/86400);
+                                                $posttimediff = $posttimediff.' days ago';
+                                            }
+                                        ?>
+                                            <span class="float-right" style="font-size:13px;">{{ $posttimediff }}</span>
+                                            <span><b><span>@</span>{{ $repcom->username }}</b></span><br/>
+                                            @if($repcom->is_deleted == 0)
+                                                <span style="font-size:13px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $repcom->comment }}</span>
+                                            @else
+                                                <span style="color:#404040;font-size:13px;">Comment is deleted because of policy and privacy breach.</span>
+                                            @endif
+                                        </div>
+                                        @endif
+                                    @endforeach
+                                    </div>
                                 </div>
                                 <?php $tot++; ?>
-                                @elseif($comment->post_id == $book->id && $tot > 2)
-                                <div class="maincom divnone">
+                                @elseif($comment->post_id == $book->id && $tot > 4)
+                                <div class="maincom divnone" data-divid="{{ $comment->id }}">
+                                
                                 <span class="float-right" style="font-size:13px;">{{ $posttimediff }}</span>
-                                <span><b><span>@</span>{{ $comment->username }}</b></span><br/>
+                                <span>{{ $tot+1 }}. <b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     @if($comment->is_deleted == 0)
-                                        <span style="font-size:14px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
+                                        <span style="font-size:13px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
                                     @else
-                                        <span style="color:#404040;font-size:14px;">Comment is deleted because of policy and privacy breach.</span>
+                                        <span style="color:#404040;font-size:13px;">Comment is deleted because of policy and privacy breach.</span>
                                     @endif
-                                    <p><a class="float-right likelink" type="button" data-reply="{{ $comment->username }}" data-replyid="{{ $comment->id }}">Reply</a><p>
+                                    <p style="margin:3px 0 0 0;"><a class="float-right likelink" type="button" data-reply="{{ $comment->username }}" data-replyid="{{ $comment->id }}">Reply</a><p><br/>
+
+                                    <div class="commentsreply">
+                                        @foreach($replycomments as $repcom)
+                                            @if($repcom->reply_to == $comment->id)
+                                            <div class="comreplys" style="background-color:#ffffb3;">
+                                            <?php
+                                                $secondsDifference=strtotime(date('Y-m-d H:i:s'))-strtotime($repcom->created_at);
+                                                if($secondsDifference <= 60){
+                                                    $posttimediff = 'Now';
+                                                }elseif($secondsDifference <= 3600){
+                                                    $posttimediff = (int) ($secondsDifference/60);
+                                                    $posttimediff = $posttimediff.' mins ago';
+                                                }elseif($secondsDifference <= 86400){
+                                                    $posttimediff = (int) ($secondsDifference/3600);
+                                                    $posttimediff = $posttimediff.' hours ago';
+                                                }else{
+                                                    $posttimediff = (int) ($secondsDifference/86400);
+                                                    $posttimediff = $posttimediff.' days ago';
+                                                }
+                                            ?>
+                                                <span class="float-right" style="font-size:13px;">{{ $posttimediff }}</span>
+                                                <span><b><span>@</span>{{ $repcom->username }}</b></span><br/>
+                                                @if($repcom->is_deleted == 0)
+                                                    <span style="font-size:13px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $repcom->comment }}</span>
+                                                @else
+                                                    <span style="color:#404040;font-size:13px;">Comment is deleted because of policy and privacy breach.</span>
+                                                @endif
+                                            </div>
+                                            @endif
+                                        @endforeach
+                                    </div>
                                 </div>
                                 <?php $tot++; ?>
                                 @endif
@@ -286,7 +359,7 @@ img {vertical-align: middle;}
                                 <div style="padding:0 10px 10px;font-size:15px;">
                                 <!-- <a href="#" onclick="morecomm()" class="float-right">Previous comments...</a> -->
                                 @if($tot > 3)
-                                <a type="button" class="float-right" onclick="morecomm()">Previous comments...</a>
+                                <span>{{ $tot }} comments</span><a type="button" class="float-right morecomm">Previous comments...</a>
                                 @endif
                                 </div>
                             </div><br/>
@@ -649,7 +722,14 @@ img {vertical-align: middle;}
                 $('div.mySlides2').animate({'margin-top': '30px'}, 1000);
 
                 // setTimeout(function() {
-                    $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span class="float-right" style="font-size:13px;">Now</span><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' ).fadeIn(4000);
+                    if(replyto == 0){
+                        $(this).closest('div.mySlides2').find( "div.comments" ).prepend( '<div class="maincom"><span class="float-right" style="font-size:13px;">Now</span><span><b>@'+username+'</b></span><br/><span>'+commt+'</span></div>' ).fadeIn(4000);
+                    }else{
+                        // alert('its a reply');
+                        // $(this).closest("div.comments").find("[data-divid='" + replyto + "']").prepend( '<p>'+username+'</p>' ).fadeIn(4000);
+                        $(this).closest( "div.mySlides2" ).find( "div.comments" ).find("[data-divid='" + replyto + "']").find(".commentsreply").prepend( '<div class="comreplys" style="background-color:#ffffb3;"><span class="float-right" style="font-size:13px;">Now</span><span><b><span>@</span>'+username+'</b></span><br/><span style="font-size:13px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">'+commt+'</span></div>' ).fadeIn(4000);
+                    }
+                    
                 // }, 1500);  
                 
                 $(this).closest("div.comform").find('.commt').val('');
@@ -678,15 +758,17 @@ img {vertical-align: middle;}
     });
     
 
-    function morecomm() {
-        // document.getElementById("demo").style.color = "red";
-        
-        // alert('clicked');
-        $('.divnone').first().fadeIn(2000);
-        $("div.divnone:eq(1)").fadeIn(4500);
-        // $('.divnone').second().fadeIn(2500);
-        // $('.divnone').first().removeClass("divnone").addClass("divblock");
-        // return false;
-    }
+    // function morecomm() {
+    $(".morecomm").on("click", function(){
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+        $("div.divnone:eq(0)").removeClass("divnone").addClass("divblock");
+    });
 </script>
 @endsection('content')
