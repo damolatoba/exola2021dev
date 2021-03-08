@@ -248,6 +248,7 @@ img {vertical-align: middle;}
                             <div class="comments">
                             <?php $tot = 0; ?>
                                 @foreach($comments as $comment)
+                                
                                 @if($comment->post_id == $book->id && $tot <= 4)
                                 <div class="maincom divblock" data-divid="{{ $comment->id }}">
                                 <?php
@@ -267,7 +268,7 @@ img {vertical-align: middle;}
                                 ?>
                                     <!-- <span class="float-right" style="font-size:13px;">{{ $comment->created_at }}</span> -->
                                     <span class="float-right" style="font-size:13px;">{{ $posttimediff }}</span>
-                                    <span>{{ $tot+1 }}. <b><span>@</span>{{ $comment->username }}</b></span><br/>
+                                    <span>{{ $comments->where('post_id', $book->id)->count() - $tot }}. <b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     @if($comment->is_deleted == 0)
                                         <span style="font-size:13px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
                                     @else
@@ -314,7 +315,7 @@ img {vertical-align: middle;}
                                 <div class="maincom divnone" data-divid="{{ $comment->id }}">
                                 
                                 <span class="float-right" style="font-size:13px;">{{ $posttimediff }}</span>
-                                <span>{{ $tot+1 }}. <b><span>@</span>{{ $comment->username }}</b></span><br/>
+                                <span>{{ $comments->where('post_id', $book->id)->count() - $tot }}. <b><span>@</span>{{ $comment->username }}</b></span><br/>
                                     @if($comment->is_deleted == 0)
                                         <span style="font-size:13px;-webkit-user-select: all;-moz-user-select: all;-ms-user-select: all;user-select: all;">{{ $comment->comment }}</span>
                                     @else
