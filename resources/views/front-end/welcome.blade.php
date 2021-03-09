@@ -218,7 +218,7 @@ img {vertical-align: middle;}
                         @if($book['file_type']== 'jpg' or $book['file_type']== 'jpeg' or $book['file_type']== 'png')
                             <img src="{{url('')}}/uploads/tdbooks/{{ $book->file_name }}" alt="{{ $book->caption }}" class="slid-img"/>
                         @else
-                            <video height="100%" width="100%" controls loop>
+                            <video height="100%" width="100%" class="vidplay" controls loop>
                                 <source src="{{url('')}}/uploads/tdbooks/{{ $book->file_name }}#t=0.7" type="video/{{ $book['file_type'] }}" class="slid-img">
                             Your browser does not support HTML video.
                             </video>
@@ -408,6 +408,8 @@ img {vertical-align: middle;}
 
                         function plusSlides(n) {
                         showSlides(slideIndex += n);
+                        var vid = document.getElementByClass("vidplay"); 
+                        vid.pause();
                         }
 
                         function currentSlide(n) {
