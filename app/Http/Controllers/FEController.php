@@ -70,6 +70,15 @@ class FEController extends Controller
         return view('front-end.article', compact('articles', 'article'));
     }
 
+    public function showpost(Tdbk $post)
+    {
+        //
+        // dd($post);
+        // $article = $post->id;
+        $articles = Article::all();
+        return view('front-end.post', compact('articles', 'post'));
+    }
+
     /**
      * Show the form for editing the specified resource.
      *

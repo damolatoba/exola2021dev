@@ -213,7 +213,7 @@ img {vertical-align: middle;}
                             <?php $ind = 0; ?>
                         @forelse($today_book as $book)
                         <?php $ind = $ind+1; ?>
-                        <div class="mySlides">
+                        <div class="mySlides" data-id="{{ $book['id'] }}">
                         <div class="numbertext">{{ $ind }} / {{ count($today_book) }}</div>
                         @if($book['file_type']== 'jpg' or $book['file_type']== 'jpeg' or $book['file_type']== 'png')
                             <img src="{{url('')}}/uploads/tdbooks/{{ $book->file_name }}" alt="{{ $book->caption }}" class="slid-img"/>
@@ -243,7 +243,7 @@ img {vertical-align: middle;}
                         <div class="slideshow-container">
                         @forelse($today_book as $book)
                         <div class="mySlides2" style="padding:0 15px;width:100%;">
-                            <p style="font-size:16px;"><b>{{ $book->caption }}</b></p>
+                            <p style="font-size:16px;"><b><a href="/bookingpost/{{ $book->id }}">{{ $book->caption }}</a></b></p>
                             <hr/>
                             <div class="comments">
                             <?php $tot = 0; ?>
@@ -621,6 +621,12 @@ img {vertical-align: middle;}
     $(".art-link").on("click", function(){
         var dataId = $(this).attr("data-id");
         window.location.replace("/article/"+dataId);
+    });
+
+    $(".mySlides").on("click", function(){
+        var dataId = $(this).attr("data-id");
+        // alert(dataId);
+        window.location.replace("/bookingpost/"+dataId);
     });
     
     $(".copy-code").on("click", function(){

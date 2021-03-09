@@ -19,6 +19,8 @@ Route::get('/', 'FEController@index');
 
 Route::get('/article/{article}', 'FEController@show');
 
+Route::get('/bookingpost/{post}', 'FEController@showpost');
+
 Route::get('/copy-code', 'CopyPostController@display');
 
 Route::post('/makecomment', 'FEController@makecomment');

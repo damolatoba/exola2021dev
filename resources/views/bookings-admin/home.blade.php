@@ -84,6 +84,21 @@
                             </span>
                         @enderror
                     </div>
+
+                    <div class="col-md-12" style="padding:25px 10px;">
+                    <textarea name="editor2" required>
+                        Text here...
+                        </textarea>
+                            <script>
+                                    CKEDITOR.replace( 'editor2' );
+                            </script>
+
+                        @error('caption')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
                 </div>
 
                 <div class="form-group row mb-0">

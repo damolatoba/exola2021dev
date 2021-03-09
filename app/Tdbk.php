@@ -13,7 +13,7 @@ class Tdbk extends Model
      * @var array
      */
     protected $fillable = [
-        'file_name', 'file_type', 'caption', 'rate',
+        'file_name', 'file_type', 'caption', 'rate', 'article'
     ];
 
     protected $table = "today-bookings";

@@ -114,6 +114,7 @@ class TdbkController extends Controller
             $input['file_name'] = $postName;
             $input['file_type'] = $extension;
             $input['rate'] = 0;
+            $input['article'] = $request->input('editor2');
 
             Tdbk::create($input);
                 return back()->with('success','Booking Posted successfully!');
