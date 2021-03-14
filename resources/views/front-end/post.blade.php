@@ -36,6 +36,7 @@
                             <p>
                                 {!! $post->article !!}
                             </p>
+                            <p class="float-right" style="font-family:calibri;font-size:14px;"><i><b>{{ $post->views }} Views</b></i></p>
                         </div>
                     </div>
                 </div>

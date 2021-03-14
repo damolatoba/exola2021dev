@@ -75,6 +75,11 @@ class FEController extends Controller
         //
         // dd($post);
         // $article = $post->id;
+        $a=array(3, 5, 7, 4);
+        $random_keys=$a[array_rand($a)];
+        // dd($random_keys);
+        $post->views = $post->views + $random_keys;
+        $post->save();
         $articles = Article::all();
         return view('front-end.post', compact('articles', 'post'));
     }
